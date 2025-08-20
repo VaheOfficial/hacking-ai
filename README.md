@@ -1,74 +1,41 @@
-# Hacking AI (Ethical Security Research Assistant)
+# WSRA (MVP)
 
-Hacking AI is a CLI agent for ethical security research on Kali Linux and other OSes. It can:
+White-Hat Security Research Assistant. Safe-by-design: **read-only** by default, scope/ROE enforced.
 
-- Run OS-aware shell commands with safety checks (bash on Linux/macOS, PowerShell on Windows)
-- Search the web and summarize content
-- Pull and summarize docs from HackTricks and GTFOBins
-- Follow an agentic loop (plan → act → observe) with optional LLM integration
-
-## Quickstart
+## Quickstart (pipx)
 
 ```bash
-# Create and activate a venv (recommended)
-python3 -m venv .venv && source .venv/bin/activate
+# Install via pipx
+pipx install .
 
-# Install
-pip install -e .
+# Or from a checkout for development
+pipx install --editable .
 
-# Run
-hacking-ai agent "enumerate linux privilege escalation vectors"
-```
+# Use the CLI
+wsra init
+wsra propose
+wsra repl
 
-Interactive mode:
+#Inside the REPL, try:
+STATUS
+LIST BLOCKS
+APPROVE CB-...
+EXEC CB-...
+RUN echo hello
+STOP
+
+#Logs/evidence are saved under your chosen OUTPUT_DIR.
+
+### AI mode
+
+1) Configure your API key securely:
 ```bash
-hacking-ai agent
+wsra ai_init --api-key sk-...
 ```
 
-## Safety and Ethics
-- This tool is for authorized testing, learning, and defensive research only.
-- Commands are allowlisted by default. Potentially dangerous commands require explicit confirmation.
-- You can bypass confirmations with `--no-confirm` (not recommended).
-
-## Agent Usage
+2) Run the loop:
 ```bash
-hacking-ai agent "find potential privesc techniques on ubuntu 22.04"
-
-# Options
-hacking-ai agent --max-steps 5 --no-confirm
+wsra ai_run --objective "Assess host 10.129.16.197 for non-destructive recon"
 ```
 
-## Docs and Web
-```bash
-# HackTricks search
-hacking-ai docs hacktricks "linux privilege escalation"
-
-# GTFOBins search
-hacking-ai docs gtfobins "awk privesc"
-
-# General web search
-hacking-ai web "CVE-2023-XYZ PoC"
-```
-
-## Single Command Runner
-```bash
-hacking-ai cmd "whoami && id"
-```
-
-## Build a Single Binary
-```bash
-pip install .[dev]
-./scripts/build.sh
-
-# Output binary: dist/hacking-ai
-./dist/hacking-ai agent "linux post-exploitation checklist"
-```
-
-## Configuration
-- Environment variables:
-  - `OPENAI_API_KEY` (optional): If set, the agent uses an OpenAI-compatible Chat Completions endpoint for reasoning/summarization.
-  - `OPENAI_BASE_URL` (optional): Defaults to `https://api.openai.com/v1`.
-  - `OPENAI_MODEL` (optional): Defaults to `gpt-4o-mini`.
-
-## Legal
-Use only on systems you own or are explicitly authorized to test. The authors assume no liability for misuse.
+The AI will propose safe command blocks for approval, execute approved steps, store results, and iterate. Session artifacts are indexed for semantic search.

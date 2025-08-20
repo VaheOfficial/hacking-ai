@@ -1,34 +1,37 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "hacking-ai"
+name = "wsra"
 version = "0.1.0"
-description = "Ethical security research assistant CLI with agent flow, safe command runner, and docs summarizer"
-authors = [
-  { name = "Hacking AI" }
-]
+description = "White-Hat Security Research Assistant (safe-by-design, read-only first)"
 readme = "README.md"
-requires-python = ">=3.9"
 license = { text = "MIT" }
+authors = [{ name = "You", email = "you@example.com" }]
+requires-python = ">=3.11"
 dependencies = [
-  "typer>=0.12.3",
-  "rich>=13.7.1",
-  "requests>=2.32.3",
-  "beautifulsoup4>=4.12.3"
+    "typer[all]>=0.12.3",
+    "rich>=13.7.1",
+    "pydantic>=2.8.2",
+    "pyyaml>=6.0.2",
+    "chromadb>=0.5.3",
+    "sentence-transformers>=2.2.2",
+    "openai>=1.46.0",
+    "keyring>=24.3.1",
 ]
-
-[project.urls]
-Homepage = "https://example.com"
 
 [project.scripts]
-hacking-ai = "hacking_ai.cli:app"
+wsra = "wsra.cli:app"
+
+[tool.ruff]
+line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+warn_unused_ignores = true
 
 [tool.setuptools.packages.find]
-where = ["src"]
-
-[project.optional-dependencies]
-dev = [
-  "pyinstaller>=6.10.0",
-]
+where = ["."]
+include = ["wsra*"]
